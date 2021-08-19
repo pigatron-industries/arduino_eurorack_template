@@ -11,7 +11,7 @@ MainController::MainController() {
 }
 
 void MainController::init() {
-    controllers[activeController]->init();
+    controllers.getActiveController()->init();
 }
 
 void MainController::process() {
@@ -20,26 +20,20 @@ void MainController::process() {
         if(Hardware::hw.encoderButton.held()) {
             //change controller when button held down
             if(Hardware::hw.encoder.getMovement() > 0) {
-                int controllerIndex = ((activeController + 1) % (controllerSize));
-                setActiveController(controllerIndex);
+                controllers.incrementController();
+                init();
             } else if (Hardware::hw.encoder.getMovement() < 0) {
-                int controllerIndex = activeController > 0 ? activeController - 1 : controllerSize - 1;
-                setActiveController(controllerIndex);
+                controllers.decrementController();
+                init();
             }
         } else {
             //button pressed
         }
     }
 
-    controllers[activeController]->process();
+    controllers.getActiveController()->init();
 }
 
 void MainController::registerController(Controller& controller) {
-    controllers[controllerSize] = &controller;
-    controllerSize++;
-}
-
-void MainController::setActiveController(int controllerIndex) {
-    controllers[controllerIndex]->init();
-    activeController = controllerIndex;
+    controllers.addController(controller);
 }

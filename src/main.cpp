@@ -3,6 +3,7 @@
 #include "hwconfig.h"
 #include "Config.h"
 
+#include "Hardware.h"
 #include "MainController.h"
 #include "controllers/TestController.h"
 
